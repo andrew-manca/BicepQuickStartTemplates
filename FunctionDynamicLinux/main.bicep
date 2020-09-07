@@ -19,6 +19,7 @@ resource function 'Microsoft.Web/sites@2019-08-01' = {
     location: location
     kind: 'functionApp,linux'
     properties: {
+        serverFarmId: asp.id
         name: siteName
         siteConfig: {
             appSettings:[

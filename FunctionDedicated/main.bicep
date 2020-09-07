@@ -2,6 +2,7 @@ param location string = resourceGroup().location
 param storageName string = 'amancauniquestoragetwo' // must be globally unique
 param siteName string = 'amancaBicepFunctionTest'
 param appInsightsName string = 'amancaInsights'
+param sku string = 'S1'
 
 var storageSku = 'Standard_LRS' // declare variable and assign value
 var hostingPlaneName = 'amancaASPWindows'
@@ -37,14 +38,6 @@ resource function 'Microsoft.Web/sites@2019-08-01' = {
                     value: 'DefaultEndpointsProtocol=https;AccountName=${storageName};AccountKey=${listKeys(stg.id, '2019-06-01').keys[0].value};EndpointSuffix=core.windows.net'
                 }
                 {
-                    name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-                    value: 'DefaultEndpointsProtocol=https;AccountName=${storageName};AccountKey=${listKeys(stg.id, '2019-06-01').keys[0].value};EndpointSuffix=core.windows.net'
-                }
-                {
-                    name: 'WEBSITE_CONTENTSHARE'
-                    value: toLower(siteName)
-                }
-                {
                     name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
                     value: reference(insights.id).InstrumentationKey
                 }
@@ -56,8 +49,12 @@ resource asp 'Microsoft.Web/serverfarms@2019-08-01' = {
     name: hostingPlaneName
     location: location
     sku:{
-        Tier:'dynamic'
-        name: 'Y1'
+        name: sku
+    }
+    properties: {
+        name: hostingPlaneName
+        workerSize: 1
+        numberOfWorkers: 1
     }
 }
 

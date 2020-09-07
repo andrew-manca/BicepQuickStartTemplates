@@ -17,6 +17,10 @@
     "appInsightsName": {
       "type": "string",
       "defaultValue": "amancaInsights"
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "S1"
     }
   },
   "functions": [],
@@ -59,14 +63,6 @@
               "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2019-06-01').keys[0].value)]"
             },
             {
-              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix=core.windows.net', parameters('storageName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2019-06-01').keys[0].value)]"
-            },
-            {
-              "name": "WEBSITE_CONTENTSHARE",
-              "value": "[toLower(parameters('siteName'))]"
-            },
-            {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "[reference(resourceId('Microsoft.insights/components', parameters('appInsightsName'))).InstrumentationKey]"
             }
@@ -85,8 +81,12 @@
       "name": "[variables('hostingPlaneName')]",
       "location": "[parameters('location')]",
       "sku": {
-        "Tier": "dynamic",
-        "name": "Y1"
+        "name": "[parameters('sku')]"
+      },
+      "properties": {
+        "name": "[variables('hostingPlaneName')]",
+        "workerSize": 1,
+        "numberOfWorkers": 1
       }
     },
     {

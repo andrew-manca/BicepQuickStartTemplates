@@ -38,6 +38,7 @@
       "location": "[parameters('location')]",
       "kind": "functionApp,linux",
       "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlaneName'))]",
         "name": "[parameters('siteName')]",
         "siteConfig": {
           "appSettings": [
@@ -57,6 +58,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlaneName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]"
       ]
     },
