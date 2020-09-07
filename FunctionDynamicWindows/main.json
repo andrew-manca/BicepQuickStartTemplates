@@ -13,6 +13,10 @@
     "siteName": {
       "type": "string",
       "defaultValue": "amancaBicepFunctionTest"
+    },
+    "appInsightsName": {
+      "type": "string",
+      "defaultValue": "amancaInsights"
     }
   },
   "functions": [],
@@ -60,11 +64,16 @@
             {
               "name": "WEBSITE_CONTENTSHARE",
               "value": "[toLower(parameters('siteName'))]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.insights/components', parameters('appInsightsName'))).InstrumentationKey]"
             }
           ]
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.insights/components', parameters('appInsightsName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageName'))]"
       ]
     },
@@ -76,6 +85,16 @@
       "sku": {
         "Tier": "dynamic",
         "name": "Y1"
+      }
+    },
+    {
+      "type": "Microsoft.insights/components",
+      "apiVersion": "2018-05-01-preview",
+      "name": "[parameters('appInsightsName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "ApplicationId": "[parameters('appInsightsName')]",
+        "Request_Source": "IbizaWebAppExtensionCreate"
       }
     }
   ],
