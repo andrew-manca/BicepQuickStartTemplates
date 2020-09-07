@@ -49,6 +49,7 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlaneName'))]",
         "name": "[parameters('siteName')]",
         "siteConfig": {
+          "alwaysOn": true,
           "appSettings": [
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",

@@ -24,6 +24,7 @@ resource function 'Microsoft.Web/sites@2019-08-01' = {
         serverFarmId: asp.id
         name: siteName
         siteConfig: {
+            alwaysOn: true
             appSettings:[
                 {
                     name: 'FUNCTIONS_WORKER_RUNTIME'
